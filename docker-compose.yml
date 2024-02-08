@@ -7,13 +7,13 @@ networks:
 services:
   nats-1:
     image: nats:2.10.10
-    container_name: n1
+    container_name: ${node1}
     restart: always
     command: -c /etc/nats/nats.conf
     ports:
-      - "4222:4222" # client port
-      - "6222:6222" # cluster port
-      - "8222:8222" # monitoring port
+      - "${client_port_1}:4222" # client port
+      - "${monitoring_port_1}:8222" # monitoring port
+      - "${gateway_port_1}:7222" # gateway port
     volumes:
       - ./nats1.conf:/etc/nats/nats.conf
       - ./storage/jetstream-cluster/n1:/data
@@ -22,13 +22,13 @@ services:
 
   nats-2:
     image: nats:2.10.10
-    container_name: n2
+    container_name: ${node2}
     restart: always
     command: -c /etc/nats/nats.conf
     ports:
-      - ":4222" # client port
-      - ":6222" # cluster port
-#      - "8222:8222" # monitoring port
+      - "${client_port_2}:4222" # client port
+      - "${monitoring_port_2}:8222" # monitoring port
+      - "${gateway_port_2}:7222" # gateway port
     volumes:
       - ./nats2.conf:/etc/nats/nats.conf
       - ./storage/jetstream-cluster/n2:/data
@@ -37,13 +37,13 @@ services:
 
   nats-3:
     image: nats:2.10.10
-    container_name: n3
+    container_name: ${node3}
     restart: always
     command: -c /etc/nats/nats.conf
     ports:
-      - ":4222" # client port
-      - ":6222" # cluster port
-#      - "8222:8222" # monitoring port
+      - "${client_port_3}:4222" # client port
+      - "${monitoring_port_3}:8222" # monitoring port
+      - "${gateway_port_3}:7222" # gateway port
     volumes:
       - ./nats3.conf:/etc/nats/nats.conf
       - ./storage/jetstream-cluster/n3:/data
@@ -69,7 +69,7 @@ services:
     labels:
       org.label-schema.group: "nats-monitoring"
     ports:
-      - "7777:7777" # client por     
+      - "7777:7777" # client port
     depends_on:
       - nats-1
 
@@ -113,7 +113,7 @@ services:
     container_name: grafana
     restart: always
     ports:
-      - "127.0.0.1:8055:3000"
+      - "${grafana}:3000"
     volumes:
       - ./grafana/dashboards:/var/lib/grafana/dashboards
       - ./grafana/provisioning:/etc/grafana/provisioning
