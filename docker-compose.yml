@@ -121,5 +121,5 @@ services:
   #     - monitor-net
   #   labels:
   #     org.label-schema.group: "nats-monitoring"
-    depends_on:
-      - prometheus
+    # depends_on:
+    #   - prometheus
